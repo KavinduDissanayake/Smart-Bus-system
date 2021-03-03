@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +39,8 @@ public class BusDriverAdapter extends RecyclerView.Adapter<BusDriverAdapter.MyVi
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate( R.layout.bus_time_row,parent,false) ;
         final MyViewHolder viewHolder = new MyViewHolder(view) ;
+
+
 
 
 
@@ -81,6 +84,8 @@ public class BusDriverAdapter extends RecyclerView.Adapter<BusDriverAdapter.MyVi
         TextView start_time;
         TextView end_time;
         ImageView bus_image;
+
+
 
 
 

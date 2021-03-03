@@ -32,7 +32,17 @@ public interface API {
     @POST("BusOwner/getTimeTable.php")
     Call<List<Driver_Time_Model>> getTimeTable(@FieldMap Map<String,String> fields);
 
+    //fot get each time keeper to allocated bus  information
+    @FormUrlEncoded
+    @POST("Timekeeper/getBusInfo.php")
+    Call<List<Bus_info_model>> TimekeepergetBusInfo(@FieldMap Map<String,String> fields);
 
+
+
+    //admin activated user
+    @FormUrlEncoded
+    @POST("Timekeeper/isComplted.php")
+    Call<ServerRespone> isComplted(@FieldMap Map<String,String> fields);
 
 
 
@@ -40,5 +50,5 @@ public interface API {
 
     @FormUrlEncoded
     @POST("auth.php")
-    Call<UserCreditial> authenticateUserh(@FieldMap Map<String,String> fields);
+    Call<UserCreditial> authenticateUser(@FieldMap Map<String,String> fields);
 }

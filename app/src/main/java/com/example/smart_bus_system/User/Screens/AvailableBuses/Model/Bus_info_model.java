@@ -16,6 +16,11 @@ public class Bus_info_model {
     private  String start_time;
     private  String end_point;
     private  String end_time;
+    private  String start_point;
+
+    public String getStart_point() {
+        return start_point;
+    }
 
     public String getEnd_time() {
         return end_time;

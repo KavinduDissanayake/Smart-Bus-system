@@ -3,19 +3,26 @@ package com.example.smart_bus_system;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.smart_bus_system.BusOwner.DriverMainActivity;
 import com.example.smart_bus_system.Conection.RetroClient;
 import com.example.smart_bus_system.Conection.UserCreditial;
+import com.example.smart_bus_system.TimeKeeper.TimeKeeperMainActivity;
 import com.example.smart_bus_system.User.UserMainNav;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,16 +81,23 @@ public class LoginActivity extends AppCompatActivity {
 
         HashMap<String, String> hashMap = new HashMap<>();
 
+
         hashMap.put("uname", login_user_name.getText().toString());
         hashMap.put("pass", login_password.getText().toString());
 
-        Call<UserCreditial> authenticateUserh= RetroClient.getInstance().getApi().authenticateUserh(hashMap);
 
-        authenticateUserh.enqueue(new Callback<UserCreditial>() {
+
+        Call<UserCreditial> authenticateUser=RetroClient.getInstance().getApi().authenticateUser(hashMap);
+
+        authenticateUser.enqueue(new Callback<UserCreditial>() {
             @Override
             public void onResponse(Call<UserCreditial> call, Response<UserCreditial> response) {
                 if(response.body().getSuccess().equals("true")) {
-                    //set the session
+
+                    AlertMessage("Login Success !");
+
+
+                                        //set the session
                     sharedpreferences =getSharedPreferences("user_details", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putBoolean("isLoggedIn",true);
@@ -92,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("bus_number",response.body().getBus_number());
                     editor.putString("route_id",response.body().getRoute_id());
                     editor.commit();
+
 
                     //to check user type
                     if (response.body().getUsertype().equals("user")) {
@@ -103,29 +118,63 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else if (response.body().getUsertype().equals("time_keeper")) {
 
-//                        startActivity(new Intent(LoginActivity.this, PharmacyMainActivity.class));
-//                        finish();
+
+                        startActivity(new Intent(LoginActivity.this, TimeKeeperMainActivity.class));
+                        finish();
                         //T
 
                     } else {
 
-//                        startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
-//                        finish();
+
+                        startActivity(new Intent(LoginActivity.this, DriverMainActivity.class));
+                        finish();
                         //
 
 
                     }
 
-                }else{
 
-                    Toast.makeText(LoginActivity.this,"Login Failed  !",Toast.LENGTH_SHORT).show();
+
+
+                }else{
+                    AlertMessage("Login Failed !");
+
+
                 }
             }
 
             @Override
             public void onFailure(Call<UserCreditial> call, Throwable t) {
 
+
+                Log.e("Error",t.getMessage());
             }
         });
+
+
+    }
+
+    private void AlertMessage(String message){
+
+        android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(LoginActivity.this);
+        dialog.setTitle( "Task Status" )
+                .setIcon(R.drawable.ic_baseline_email_24)
+                .setMessage(message)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialoginterface, int i) {
+                        dialoginterface.cancel();
+                    }}).show();
+
+    }
+    public static boolean isValidPassword(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+
     }
 }

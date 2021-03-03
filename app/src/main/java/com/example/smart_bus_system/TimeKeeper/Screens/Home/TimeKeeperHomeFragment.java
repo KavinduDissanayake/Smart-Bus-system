@@ -1,4 +1,4 @@
-package com.example.smart_bus_system.BusOwner.Screens.Home;
+package com.example.smart_bus_system.TimeKeeper.Screens.Home;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,11 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.smart_bus_system.BusOwner.Screens.Home.Adapter.BusDriverAdapter;
 import com.example.smart_bus_system.BusOwner.Screens.Home.Model.Driver_Time_Model;
 import com.example.smart_bus_system.Conection.RetroClient;
 import com.example.smart_bus_system.R;
-import com.example.smart_bus_system.User.Screens.AvailableBuses.Adapter.BusInfoAdpater;
+import com.example.smart_bus_system.TimeKeeper.Screens.Home.Adapter.TimeKeeperAdapter;
 import com.example.smart_bus_system.User.Screens.AvailableBuses.Model.Bus_info_model;
 
 import java.util.HashMap;
@@ -29,7 +28,7 @@ import retrofit2.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class Driver_Home extends Fragment {
+public class TimeKeeperHomeFragment extends Fragment {
 
     View view;
 
@@ -37,34 +36,27 @@ public class Driver_Home extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
 
 
-    String Current_user_bus_id="123";
+    String Current_user_route_id="1";
+
 
 
     //session for get values
     SharedPreferences sharedpreferences;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        view=inflater.inflate(R.layout.driver_home_fragment, container, false);
+        view=inflater.inflate(R.layout.time_keeper_home_fragment, container, false);
 
         //declare a session
         sharedpreferences=getContext().getSharedPreferences("user_details",MODE_PRIVATE);
-        Current_user_bus_id=sharedpreferences.getString("bus_number","");
-
-
+        Current_user_route_id=sharedpreferences.getString("route_id","");
 
 
 
         init();
         LoadData();
-
-
-
 
 
         return view;
@@ -91,35 +83,34 @@ public class Driver_Home extends Fragment {
 
     }
 
+
     private void LoadData() {
 
+
         HashMap<String, String> params= new HashMap<>();
-
-        params.put("bus_no",Current_user_bus_id);
-
-
-        Call<List<Driver_Time_Model>> getTimeTable= RetroClient.getInstance().getApi().getTimeTable(params);
+        params.put("route_id",Current_user_route_id);
 
 
-       getTimeTable.enqueue(new Callback<List<Driver_Time_Model>>() {
-           @Override
-           public void onResponse(Call<List<Driver_Time_Model>> call, Response<List<Driver_Time_Model>> response) {
+        Call<List<Bus_info_model>> TimekeepergetBusInfo= RetroClient.getInstance().getApi().TimekeepergetBusInfo(params);
+
+        TimekeepergetBusInfo.enqueue(new Callback<List<Bus_info_model>>() {
+            @Override
+            public void onResponse(Call<List<Bus_info_model>> call, Response<List<Bus_info_model>> response) {
+                List<Bus_info_model> result= response.body();
+
+                TimeKeeperAdapter timeKeeperAdapter= new TimeKeeperAdapter(getContext(),result);
+                recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerview.setAdapter(timeKeeperAdapter);
 
 
 
-               List<Driver_Time_Model> result=response.body();
+            }
 
+            @Override
+            public void onFailure(Call<List<Bus_info_model>> call, Throwable t) {
 
-               BusDriverAdapter busDriverAdapter= new BusDriverAdapter(getContext(),result);
+            }
+        });
 
-               recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-               recyclerview.setAdapter(busDriverAdapter);
-           }
-
-           @Override
-           public void onFailure(Call<List<Driver_Time_Model>> call, Throwable t) {
-
-           }
-       });
     }
 }

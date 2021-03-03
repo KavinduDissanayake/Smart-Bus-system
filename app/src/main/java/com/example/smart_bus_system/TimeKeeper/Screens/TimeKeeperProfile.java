@@ -1,5 +1,7 @@
 package com.example.smart_bus_system.TimeKeeper.Screens;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,60 +9,71 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.smart_bus_system.LoginActivity;
 import com.example.smart_bus_system.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TimeKeeperProfile#newInstance} factory method to
- * create an instance of this fragment.
- */
+import static android.content.Context.MODE_PRIVATE;
+
+
 public class TimeKeeperProfile extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+View view;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+Button logo_out;
 
-    public TimeKeeperProfile() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TimeKeeperProfile.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TimeKeeperProfile newInstance(String param1, String param2) {
-        TimeKeeperProfile fragment = new TimeKeeperProfile();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    //session for get values
+    SharedPreferences sharedpreferences;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.time_keeper_profile_fragment, container, false);
+
+        view=inflater.inflate(R.layout.time_keeper_profile_fragment, container, false);
+        init();
+
+        return view;
+    }
+
+    private void init() {
+
+
+
+        logo_out=view.findViewById(R.id.logo_out);
+        logo_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                LogOut();
+            }
+        });
+
+    }
+
+    private void LogOut() {
+
+        //declare a session
+        sharedpreferences=getContext().getSharedPreferences("user_details",MODE_PRIVATE);
+        //sessions clear when user log out
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putBoolean("isLoggedIn",false);
+        editor.putString("usertype","");
+        editor.putString("uid","");
+        editor.putString("bus_number","");
+        editor.putString("route_id","");
+
+
+        editor.clear();
+        editor.commit();
+
+
+        startActivity(new Intent(getActivity(), LoginActivity.class));
+        getActivity().finish();
     }
 }
