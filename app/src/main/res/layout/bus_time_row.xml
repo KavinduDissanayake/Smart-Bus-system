@@ -18,7 +18,7 @@
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/doctor_image"
+            android:id="@+id/bus_image"
             android:layout_width="92dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -33,7 +33,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/doctor_name"
+                android:id="@+id/bus_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
@@ -41,13 +41,13 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/start_time"
                 android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
             <TextView
-                android:id="@+id/time"
+                android:id="@+id/end_time"
                 android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

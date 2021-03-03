@@ -14,6 +14,9 @@ import com.example.smart_bus_system.BusOwner.Screens.Home.Model.Driver_Time_Mode
 import com.example.smart_bus_system.R;
 import com.example.smart_bus_system.User.Screens.AvailableBuses.Adapter.BusInfoAdpater;
 import com.example.smart_bus_system.User.Screens.AvailableBuses.Model.Bus_info_model;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -44,6 +47,25 @@ public class BusDriverAdapter extends RecyclerView.Adapter<BusDriverAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
+
+        holder.bus_name.setText(time_modelList.get(position).getBus_name()+"");
+
+
+        holder.start_time.setText("Start Time:"+time_modelList.get(position).getStart_time()+"");
+        holder.end_time.setText("End Time:"+time_modelList.get(position).getEnd_time()+"");
+
+        try {
+
+            Picasso.get().load( time_modelList.get(position).getBus_img_path())
+                    .networkPolicy( NetworkPolicy.NO_CACHE)
+                    .memoryPolicy( MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                    .into( holder.bus_image );
+
+
+        }catch (Exception e){
+
+        }
+
     }
 
     @Override
@@ -56,27 +78,19 @@ public class BusDriverAdapter extends RecyclerView.Adapter<BusDriverAdapter.MyVi
 
 
         TextView bus_name;
-        TextView bus_no;
-        TextView bus_condtions;
         TextView start_time;
-        TextView bus_contact_number;
-        TextView bus_avb_seats;
         TextView end_time;
-        ImageView post_image;
+        ImageView bus_image;
 
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-//            bus_name=itemView.findViewById(R.id.bus_name);
-//            bus_no=itemView.findViewById(R.id.bus_no);
-//            bus_condtions=itemView.findViewById(R.id.bus_condtions);
-//            start_time=itemView.findViewById(R.id.start_time);
-//            bus_contact_number=itemView.findViewById(R.id.bus_contact_number);
-//            bus_avb_seats=itemView.findViewById(R.id.bus_avb_seats);
-//            end_time=itemView.findViewById(R.id.end_time);
-//            post_image=itemView.findViewById(R.id.post_image);
+            bus_image=itemView.findViewById(R.id.bus_image);
+            bus_name=itemView.findViewById(R.id.bus_name);
+            start_time=itemView.findViewById(R.id.start_time);
+            end_time=itemView.findViewById(R.id.end_time);
 
 
         }

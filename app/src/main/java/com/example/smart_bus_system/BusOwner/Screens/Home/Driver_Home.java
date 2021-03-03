@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.smart_bus_system.BusOwner.Screens.Home.Adapter.BusDriverAdapter;
 import com.example.smart_bus_system.BusOwner.Screens.Home.Model.Driver_Time_Model;
 import com.example.smart_bus_system.Conection.RetroClient;
 import com.example.smart_bus_system.R;
@@ -86,6 +87,15 @@ public class Driver_Home extends Fragment {
            @Override
            public void onResponse(Call<List<Driver_Time_Model>> call, Response<List<Driver_Time_Model>> response) {
 
+
+
+               List<Driver_Time_Model> result=response.body();
+
+
+               BusDriverAdapter busDriverAdapter= new BusDriverAdapter(getContext(),result);
+
+               recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+               recyclerview.setAdapter(busDriverAdapter);
            }
 
            @Override
